@@ -20,11 +20,11 @@ def resolve(url, baseUrl, level = 0, pcode = '', headers={}, basePath='',log=Non
         wb_data = requests.get(remoteUrl, headers=headers, timeout=30)
     except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
         log.error('请求超时！url=%s' % remoteUrl)
-        time.sleep(60)
+        time.sleep(30)
         return
     except (urllib3.exceptions.MaxRetryError, urllib3.exceptions.NewConnectionError):
         log.error('重试测试过多，请求失败！url=%s' % remoteUrl)
-        time.sleep(60)
+        time.sleep(30)
         return
     if wb_data.status_code != 200:
         log.error('访问地址错误！url=%s' % remoteUrl)
@@ -44,7 +44,7 @@ def resolve(url, baseUrl, level = 0, pcode = '', headers={}, basePath='',log=Non
                     cBasePath = url[0 : url.index('/') + 1]
                 else:
                     cBasePath = ''
-                resolve(area['url'], baseUrl + 'a', level + 1, area['code'], headers, basePath = basePath + cBasePath, log=log)
+                resolve(area['url'], baseUrl , level + 1, area['code'], headers, basePath = basePath + cBasePath, log=log)
 
 
 def resolveAreaList(areaList, log):
@@ -66,7 +66,7 @@ def resolveAreaList(areaList, log):
                })
            else:
                if log:
-                  info(log, '解析错误，格式不对：area=%s' % area)
+                  log.error('解析错误，格式不对：area=%s' % area)
                print('解析错误，格式不对：area=%s' % area)
     return areas
 
