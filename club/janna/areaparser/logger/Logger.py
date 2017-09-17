@@ -1,7 +1,7 @@
 
 class Logger:
-    def __init__(self, level='info'):
-        self.logfile = open('../../../log/run.log', 'a',encoding='utf8')
+    def __init__(self, logPath, level='info'):
+        self.logfile = open(logPath, 'a',encoding='utf8')
         self.level = level
 
     def __del__(self):
