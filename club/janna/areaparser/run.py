@@ -7,7 +7,7 @@ import requests
 import time
 
 # 日志
-log = Logger(level='debug')
+log = Logger('../../../log/run.log', level='debug')
 startTime = time.time()
 log.info('-----------------start time: %s---------------------' % time.asctime(time.localtime(startTime)))
 
