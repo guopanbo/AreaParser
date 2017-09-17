@@ -2,13 +2,14 @@
 
 from bs4 import BeautifulSoup
 from club.janna.areaparser.resolver.resolver import resolve
+from club.janna.areaparser.logger.Logger import *
 import requests
 import time
 
 # 日志
-log = open('../../../log/run.log', 'a')
+log = Logger(level='debug')
 startTime = time.time()
-log.write('\n-----------------start time: %s---------------------' % time.asctime(time.localtime(startTime)))
+log.info('-----------------start time: %s---------------------' % time.asctime(time.localtime(startTime)))
 
 # 2016年统计用区划代码
 url = 'http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2016/'
@@ -45,12 +46,11 @@ try:
         resolve(index['url'], url, level=1, pcode=index['name'], headers=headers, log=log)
 except RuntimeError as re:
     print(re)
+    log.error(re)
+    log.error('程序出错退出！')
     print('程序出错退出！')
 else:
     print('解析完毕！')
     endTime = time.time()
-    log.write('\n-----------------end time: %s---------------------' % time.asctime(time.localtime(endTime)))
+    log.info('-----------------end time: %s---------------------' % time.asctime(time.localtime(endTime)))
     print('用时 %f 秒' % ((endTime - startTime) / 1000.0))
-finally:
-    log.flush()
-    log.close()

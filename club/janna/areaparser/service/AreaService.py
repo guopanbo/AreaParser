@@ -23,20 +23,21 @@ class AreaService:
     '''
     def save(self, areaEntity):
         if not areaEntity:
+            if self.log:
+                self.log.error('参数错误' + areaEntity)
             print('参数错误' + areaEntity)
             return False
         sql = self.saveSql % (areaEntity.getCode(), areaEntity.getName(), areaEntity.getPcode(), areaEntity.getUrl())
         if self.showSql:
             print(sql)
         if self.log:
-            self.log.write(sql + '\n')
+            self.log.debug(sql)
         try:
             self.cursor.execute(sql.encode('utf-8'))
             self.connect.commit()
         except pymysql.err.IntegrityError:
             if self.log:
-                self.log.write(sql + '\n')
-                self.log.write('此区域编码已存在：%s' % areaEntity.getCode())
+                self.log.error('此区域编码已存在：code=%s, sql=%s' % (areaEntity.getCode(), sql))
         return True
 
     def getByName(self, name):
