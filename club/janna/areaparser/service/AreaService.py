@@ -36,7 +36,7 @@ class AreaService:
         except pymysql.err.IntegrityError:
             if self.log:
                 self.log.write(sql + '\n')
-            print('此区域编码已存在：%s' % areaEntity.getCode())
+                self.log.write('此区域编码已存在：%s' % areaEntity.getCode())
         return True
 
     def getByName(self, name):

@@ -32,9 +32,9 @@ def resolve(url, baseUrl, level = 0, pcode = '', headers={}, basePath='',log=Non
     soup = BeautifulSoup(wb_data.content, 'lxml')
     wb_data.close()
     areaList = soup.select('body > table:nth-of-type(2) > tbody > tr:nth-of-type(1) > td > table > tbody > tr:nth-of-type(2) > td > table > tbody > tr > td > table > tr.%s' % getClassNameByLevel(level))
-    areas = resolveAreaList(areaList)
+    areas = resolveAreaList(areaList, log)
     # print(areas)
-    areaService = AreaService(showSql=True)
+    areaService = AreaService(showSql=True, log=log)
     for area in areas:
         if area:
             areaService.save(AreaEntity(area['code'], area['name'], pcode, remoteUrl))
@@ -44,14 +44,14 @@ def resolve(url, baseUrl, level = 0, pcode = '', headers={}, basePath='',log=Non
                     cBasePath = url[0 : url.index('/') + 1]
                 else:
                     cBasePath = ''
-                resolve(area['url'], baseUrl, level + 1, area['code'], headers, basePath = basePath + cBasePath)
+                resolve(area['url'], baseUrl + 'a', level + 1, area['code'], headers, basePath = basePath + cBasePath, log=log)
 
 def info(log, s):
     if not log:
         return
     log.write('%s\n' % s)
 
-def resolveAreaList(areaList):
+def resolveAreaList(areaList, log):
     areas = []
     for area in areaList:
         areaAs = area.select('td > a')
@@ -69,6 +69,8 @@ def resolveAreaList(areaList):
                    'name': areaAs[2].text
                })
            else:
+               if log:
+                  info(log, '解析错误，格式不对：area=%s' % area)
                print('解析错误，格式不对：area=%s' % area)
     return areas
 

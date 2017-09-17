@@ -50,6 +50,7 @@ else:
     print('解析完毕！')
     endTime = time.time()
     log.write('\n-----------------end time: %s---------------------' % time.asctime(time.localtime(endTime)))
-    print('用时 %f 秒' % (endTime - startTime) / 1000.0)
+    print('用时 %f 秒' % ((endTime - startTime) / 1000.0))
 finally:
+    log.flush()
     log.close()
